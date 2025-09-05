@@ -1,3 +1,4 @@
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions.js';
 
 export default (): PostgresConnectionOptions => ({
@@ -5,4 +6,5 @@ export default (): PostgresConnectionOptions => ({
   url: process.env.PRODUCTION_DATABASE_URL,
   entities: [__dirname + './../**/*.entity.{js,ts}'],
   synchronize: false,
+  namingStrategy: new SnakeNamingStrategy(),
 });
