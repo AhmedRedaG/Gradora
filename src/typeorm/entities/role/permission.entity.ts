@@ -1,17 +1,9 @@
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, ManyToMany } from 'typeorm';
 import { Role } from './role.entity';
+import { RolePermissionContent } from 'src/typeorm/abstractions/rolePermissionContent.abstract';
 
 @Entity()
-export class Permission {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column({ length: 150 })
-  name: string;
-
-  @Column({ nullable: true })
-  description: string;
-
+export class Permission extends RolePermissionContent {
   @ManyToMany(() => Role, (role) => role.permissions)
   roles: Role[];
 }

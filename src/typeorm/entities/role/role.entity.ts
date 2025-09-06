@@ -1,25 +1,10 @@
-import {
-  Column,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
 import { Permission } from './permission.entity';
 import { User } from '../user/user.entity';
+import { RolePermissionContent } from 'src/typeorm/abstractions/rolePermissionContent.abstract';
 
 @Entity()
-export class Role {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column({ length: 150 })
-  name: string;
-
-  @Column({ nullable: true })
-  description: string;
-
+export class Role extends RolePermissionContent {
   @ManyToMany(() => Permission, (permission) => permission.roles)
   @JoinTable()
   permissions: Permission[];
