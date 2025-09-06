@@ -2,8 +2,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { User } from '../user/user.entity';
 
 @Entity()
 export class Otp {
@@ -21,4 +24,8 @@ export class Otp {
 
   @Column('timestamp')
   expiresAt: Date;
+
+  @ManyToOne(() => User, (user) => user.otps)
+  @Index()
+  user: User;
 }

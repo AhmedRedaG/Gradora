@@ -1,9 +1,12 @@
 import {
   Column,
   Entity,
+  JoinColumn,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { User } from './user.entity';
 
 @Entity()
 export class StudentProfile {
@@ -27,4 +30,8 @@ export class StudentProfile {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @OneToOne(() => User)
+  @JoinColumn()
+  user: User;
 }

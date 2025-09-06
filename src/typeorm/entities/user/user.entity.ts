@@ -2,9 +2,16 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { StudentProfile } from './studentProfile.entity';
+import { SupervisorProfile } from './supervisorProfile.entity';
+import { Otp } from '../auth/otp.entity';
+import { RefreshToken } from '../auth/refreshToken.entity';
+import { Session } from '../auth/session.entity';
 
 @Entity()
 export class User {
@@ -43,4 +50,22 @@ export class User {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @OneToOne(() => StudentProfile, (studentProfile) => studentProfile.user)
+  studentProfile: StudentProfile;
+
+  @OneToOne(
+    () => SupervisorProfile,
+    (supervisorProfile) => supervisorProfile.user,
+  )
+  supervisorProfile: SupervisorProfile;
+
+  @OneToMany(() => Otp, (otp) => otp.user)
+  otps: Otp[];
+
+  @OneToMany(() => RefreshToken, (refreshToken) => refreshToken.user)
+  refreshTokens: RefreshToken[];
+
+  @OneToMany(() => Session, (session) => session.user)
+  sessions: Session[];
 }
