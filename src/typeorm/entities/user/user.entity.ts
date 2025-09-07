@@ -15,6 +15,8 @@ import { Otp } from '../auth/otp.entity';
 import { RefreshToken } from '../auth/refreshToken.entity';
 import { Session } from '../auth/session.entity';
 import { Role } from '../role/role.entity';
+import { TeamMember } from '../team/teamMember.entity';
+import { TeamSupervisor } from '../team/teamSupervisor.entity';
 
 @Entity()
 export class User {
@@ -71,6 +73,12 @@ export class User {
 
   @OneToMany(() => Session, (session) => session.user)
   sessions: Session[];
+
+  @OneToMany(() => TeamMember, (teamMember) => teamMember.user)
+  teamMembers: TeamMember[];
+
+  @OneToMany(() => TeamSupervisor, (teamSupervisor) => teamSupervisor.user)
+  teamSupervisors: TeamSupervisor[];
 
   @ManyToOne(() => Role, (role) => role.users)
   @Index()
