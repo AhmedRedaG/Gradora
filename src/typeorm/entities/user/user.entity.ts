@@ -39,7 +39,7 @@ export class User {
   email: string;
 
   @Column('text') // using hash
-  password: string;
+  password?: string;
 
   @Column({ nullable: true })
   linkedinUrl: string;

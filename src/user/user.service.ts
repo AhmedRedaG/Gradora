@@ -19,10 +19,8 @@ export class UserService {
     @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
 
-  async findByEmail(email: string): Promise<User> {
-    const user = await this.userRepository.findOne({ where: { email } });
-    if (!user) throw new NotFoundException();
-    return user;
+  async findByEmail(email: string): Promise<User | null> {
+    return await this.userRepository.findOne({ where: { email } });
   }
 
   async findById(id: string): Promise<User> {
@@ -32,14 +30,13 @@ export class UserService {
   }
 
   async create(userDto: CreateUserDto): Promise<User> {
-    const isUserExist = await this.userRepository.findOne({
-      where: { email: userDto.email },
-    });
+    const isUserExist = await this.findByEmail(userDto.email);
     if (isUserExist) {
       throw new ConflictException('user exists with this email');
     }
 
-    const user = await this.userRepository.save(userDto);
-    return user;
+    const { password, ...result } = await this.userRepository.save(userDto);
+
+    return result;
   }
 }

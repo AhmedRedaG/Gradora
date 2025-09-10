@@ -1,4 +1,8 @@
 export default () => ({
+  auth: {
+    path: '/auth',
+  },
+
   bcrypt: {
     rounds: 10,
   },
@@ -11,7 +15,7 @@ export default () => ({
     refresh: {
       secret: process.env.REFRESH_TOKEN_SECRET,
       expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN || '7d',
-      cookieExpiresIn:
+      expiresInMS:
         process.env.REFRESH_TOKEN_COOKIE_EXPIRES_IN || 7 * 24 * 60 * 60 * 1000,
     },
     verification: {
