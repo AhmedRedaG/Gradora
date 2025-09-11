@@ -3,6 +3,10 @@ export default () => ({
     path: '/auth',
   },
 
+  client: { baseUrl: 'http://localhost:8080' },
+
+  company: { name: 'Gradora' },
+
   verification: {
     maxAttempts: 3,
     coolDown: 1000 * 60 * 15, // 15m
@@ -26,7 +30,16 @@ export default () => ({
     },
     verification: {
       secret: process.env.VERIFICATION_TOKEN_SECRET,
-      expiresIn: process.env.VERIFICATION_TOKEN_EXPIRES_IN || '30d',
+      expiresIn: process.env.VERIFICATION_TOKEN_EXPIRES_IN || '15m',
     },
+  },
+
+  email: {
+    smtpHost: process.env.SMTP_HOST || 'smtp.gmail.com',
+    smtpPort: process.env.SMTP_PORT || 587,
+    smtpSecure: false,
+    serverEmail: process.env.SERVER_MAIL,
+    serverEmailPass: process.env.SERVER_MAIL_PASS,
+    supportEmail: process.env.SUPPORT_MAIL || process.env.SERVER_MAIL,
   },
 });

@@ -17,6 +17,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { RefreshToken } from 'src/typeorm/entities/auth/refreshToken.entity';
 import { Repository } from 'typeorm';
 import { AuthAttempt } from 'src/typeorm/entities/auth/authAttempt.entity';
+import { EmailService } from 'src/email/email.service';
 
 @Injectable()
 export class AuthService {
@@ -28,6 +29,7 @@ export class AuthService {
     private userService: UserService,
     private configService: ConfigService,
     private jwtService: JwtService,
+    private emailService: EmailService,
   ) {}
 
   async register(userDto: CreateUserDto) {
@@ -45,7 +47,7 @@ export class AuthService {
     return { user };
   }
 
-  async sendVerificationToken(email: string) {
+  async sendVerification(email: string) {
     const user = await this.userService.findByEmail(email);
 
     if (!user) {
@@ -63,8 +65,40 @@ export class AuthService {
       JwtTypes.VER,
     );
 
-    // send verification mail
-    // ...
+    // without await to avoid I/O blocking
+    this.emailService
+      .sendVerifyTokenMail(user, verificationToken)
+      .catch((error) => {
+        console.error(
+          `Failed to send verification email for user ${user.id}:`,
+          error.message,
+        );
+        throw error;
+      });
+
+    return { verificationToken };
+  }
+
+  async verify(verificationToken: string) {
+    const { sub: userId } = await this.verifyToken(
+      verificationToken,
+      JwtTypes.VER,
+    );
+
+    const user = await this.userService.findById(userId);
+    if (user.isVerified) {
+      throw new BadRequestException('user already verified');
+    }
+    user.isVerified = true;
+    await this.userService.confirmVerification(userId);
+
+    const { accessToken, refreshToken } = await this.generateAuthTokens({
+      sub: userId,
+    });
+
+    await this.setRefreshToken(user, refreshToken);
+
+    return { user, accessToken, refreshToken };
   }
 
   async login(loginDto: LocalLoginDto) {

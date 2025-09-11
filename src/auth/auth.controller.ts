@@ -3,6 +3,7 @@ import {
   Controller,
   HttpCode,
   HttpStatus,
+  Param,
   ParseBoolPipe,
   Patch,
   Post,
@@ -12,7 +13,7 @@ import {
 import { CreateUserDto } from 'src/user/dto/createUser.dto';
 import { AuthService } from './auth.service';
 import { LocalLoginDto } from './dto/login.dto';
-import type { Response } from 'express';
+import { type Response } from 'express';
 import { CookieService } from 'src/cookie/cookie.service';
 import { Cookie } from './decorator/cookie.decorator';
 import { EmailDto } from './dto/email.dto';
@@ -32,14 +33,24 @@ export class AuthController {
 
   @Post('verify')
   @HttpCode(HttpStatus.OK)
-  async sendVerificationToken(@Body() emailDto: EmailDto) {
-    const data = await this.authService.sendVerificationToken(emailDto.email);
+  async sendVerification(@Body() emailDto: EmailDto) {
+    const data = await this.authService.sendVerification(emailDto.email);
 
     return data;
   }
 
   @Patch('verify/:verificationToken')
-  verify() {}
+  async verify(
+    @Param('verificationToken') verificationToken: string,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const { refreshToken, ...data } =
+      await this.authService.verify(verificationToken);
+
+    this.cookieService.createRefreshTokenCookie(refreshToken, res);
+
+    return data;
+  }
 
   @Post('login')
   @HttpCode(HttpStatus.OK)

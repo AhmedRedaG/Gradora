@@ -7,6 +7,7 @@ import { UserModule } from 'src/user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { CookieModule } from 'src/cookie/cookie.module';
 import { AuthAttempt } from 'src/typeorm/entities/auth/authAttempt.entity';
+import { EmailModule } from 'src/email/email.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { AuthAttempt } from 'src/typeorm/entities/auth/authAttempt.entity';
     JwtModule.register({}),
     UserModule,
     CookieModule,
+    EmailModule,
   ],
   controllers: [AuthController],
   providers: [AuthService],

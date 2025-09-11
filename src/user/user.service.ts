@@ -20,14 +20,12 @@ export class UserService {
   ) {}
 
   async findByEmail(email: string): Promise<User | null> {
-    return await this.userRepository.findOne({
-      where: { email },
-    });
+    return await this.userRepository.findOneBy({ email });
   }
 
   async findById(id: string): Promise<User> {
-    const user = await this.userRepository.findOne({ where: { id } });
-    if (!user) throw new NotFoundException();
+    const user = await this.userRepository.findOneBy({ id });
+    if (!user) throw new NotFoundException('user not found');
     return user;
   }
 
@@ -40,5 +38,9 @@ export class UserService {
     const { password, ...result } = await this.userRepository.save(userDto);
 
     return result;
+  }
+
+  async confirmVerification(userId: string) {
+    return await this.userRepository.update(userId, { isVerified: true });
   }
 }
