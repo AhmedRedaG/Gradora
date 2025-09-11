@@ -3,6 +3,12 @@ export default () => ({
     path: '/auth',
   },
 
+  verification: {
+    maxAttempts: 3,
+    coolDown: 1000 * 60 * 15, // 15m
+    maxCoolDown: 1000 * 60 * 60 * 24, // 24h
+  },
+
   bcrypt: {
     rounds: 10,
   },
@@ -16,7 +22,7 @@ export default () => ({
       secret: process.env.REFRESH_TOKEN_SECRET,
       expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN || '7d',
       expiresInMS:
-        process.env.REFRESH_TOKEN_COOKIE_EXPIRES_IN || 7 * 24 * 60 * 60 * 1000,
+        process.env.REFRESH_TOKEN_COOKIE_EXPIRES_IN || 7 * 24 * 60 * 60 * 1000, // 7d
     },
     verification: {
       secret: process.env.VERIFICATION_TOKEN_SECRET,

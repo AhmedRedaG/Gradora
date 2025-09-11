@@ -6,10 +6,11 @@ import { RefreshToken } from 'src/typeorm/entities/auth/refreshToken.entity';
 import { UserModule } from 'src/user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { CookieModule } from 'src/cookie/cookie.module';
+import { AuthAttempt } from 'src/typeorm/entities/auth/authAttempt.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([RefreshToken]),
+    TypeOrmModule.forFeature([RefreshToken, AuthAttempt]),
     JwtModule.register({}),
     UserModule,
     CookieModule,

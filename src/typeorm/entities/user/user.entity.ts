@@ -17,6 +17,7 @@ import { Session } from '../auth/session.entity';
 import { Role } from '../role/role.entity';
 import { TeamMember } from '../team/teamMember.entity';
 import { TeamSupervisor } from '../team/teamSupervisor.entity';
+import { AuthAttempt } from '../auth/authAttempt.entity';
 
 @Entity()
 export class User {
@@ -41,6 +42,9 @@ export class User {
   @Column('text') // using hash
   password?: string;
 
+  @Column('boolean', { default: false })
+  isVerified: boolean;
+
   @Column({ nullable: true })
   linkedinUrl: string;
 
@@ -64,6 +68,9 @@ export class User {
     (supervisorProfile) => supervisorProfile.user,
   )
   supervisorProfile: SupervisorProfile;
+
+  @OneToOne(() => AuthAttempt, (authAttempt) => authAttempt.user)
+  authAttempt: AuthAttempt;
 
   @OneToMany(() => Otp, (otp) => otp.user)
   otps: Otp[];

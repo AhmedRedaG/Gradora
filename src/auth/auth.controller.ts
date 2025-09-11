@@ -15,6 +15,7 @@ import { LocalLoginDto } from './dto/login.dto';
 import type { Response } from 'express';
 import { CookieService } from 'src/cookie/cookie.service';
 import { Cookie } from './decorator/cookie.decorator';
+import { EmailDto } from './dto/email.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -31,7 +32,11 @@ export class AuthController {
 
   @Post('verify')
   @HttpCode(HttpStatus.OK)
-  sendVerificationToken() {}
+  async sendVerificationToken(@Body() emailDto: EmailDto) {
+    const data = await this.authService.sendVerificationToken(emailDto.email);
+
+    return data;
+  }
 
   @Patch('verify/:verificationToken')
   verify() {}
