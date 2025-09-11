@@ -177,7 +177,7 @@ export class AuthService {
     });
 
     if (!authAttempt) {
-      throw new NotFoundException('Attempts not found');
+      throw new Error('no authAttempt fund for user: ' + userId);
     }
 
     const { maxAttempts, coolDown, maxCoolDown } =
@@ -257,21 +257,52 @@ export class AuthService {
 
   async validateUser(loginDto: LocalLoginDto): Promise<User> {
     const user = await this.userService.findByEmail(loginDto.email);
-
     if (!user) {
       throw new UnauthorizedException('invalid email or password');
     }
+
+    const authAttempt = await this.validateLoginAttempts(user.id);
 
     const isValidPassword = await bcrypt.compare(
       loginDto.password,
       user.password!,
     );
     if (!isValidPassword) {
+      await this.authAttemptRepository.increment(
+        { id: authAttempt.id },
+        'loginAttempts',
+        1,
+      );
+
       throw new UnauthorizedException('invalid email or password');
     }
+
+    await this.authAttemptRepository.update(authAttempt.id, {
+      loginAttempts: 0,
+    });
 
     const { password, ...result } = user;
 
     return result;
+  }
+
+  async validateLoginAttempts(userId: string): Promise<AuthAttempt> {
+    const authAttempt = await this.authAttemptRepository.findOne({
+      where: { user: { id: userId } },
+    });
+
+    if (!authAttempt) {
+      throw new Error('no authAttempt fund for user: ' + userId);
+    }
+
+    const maxAttempts = this.configService.get('login.maxAttempts') as number;
+
+    if (authAttempt.loginAttempts >= maxAttempts) {
+      throw new ForbiddenException(
+        `Too many attempts. Reset your password or contact support.`,
+      );
+    }
+
+    return authAttempt;
   }
 }

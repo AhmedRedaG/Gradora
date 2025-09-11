@@ -13,6 +13,10 @@ export default () => ({
     maxCoolDown: 1000 * 60 * 60 * 24, // 24h
   },
 
+  login: {
+    maxAttempts: 10,
+  },
+
   bcrypt: {
     rounds: 10,
   },

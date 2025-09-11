@@ -22,9 +22,6 @@ export class AuthAttempt {
   @Column('int', { default: 0 })
   loginAttempts: number;
 
-  @CreateDateColumn()
-  lastLoginAttempt: Date;
-
   @OneToOne(() => User, (user) => user.authAttempt)
   @JoinColumn()
   user: User;
