@@ -1,7 +1,7 @@
 import { Entity, ManyToOne } from 'typeorm';
 import { Team } from './team.entity';
 import { User } from '../user/user.entity';
-import { TeamUserContent } from 'src/typeorm/abstractions/teamUserContent.abstract';
+import { TeamUserContent } from 'src/typeorm/abstractions/team-user-content.abstract';
 
 @Entity()
 export class TeamSupervisor extends TeamUserContent {

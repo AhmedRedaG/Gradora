@@ -5,14 +5,14 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { CreateUserDto } from 'src/user/dto/createUser.dto';
+import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { UserService } from 'src/user/user.service';
 import { LocalLoginDto } from './dto/login.dto';
 import { JwtTypes } from '../auth-utils/types/jwt.types';
 import { InjectRepository } from '@nestjs/typeorm';
-import { RefreshToken } from 'src/typeorm/entities/auth/refreshToken.entity';
+import { RefreshToken } from 'src/typeorm/entities/auth/refresh-token.entity';
 import { MoreThan, Repository } from 'typeorm';
-import { AuthAttempt } from 'src/typeorm/entities/auth/authAttempt.entity';
+import { AuthAttempt } from 'src/typeorm/entities/auth/auth-attempt.entity';
 import { EmailService } from 'src/email/email.service';
 import { Otp } from 'src/typeorm/entities/auth/otp.entity';
 import { AuthAttemptTypes } from '../auth-utils/types/auth.types';

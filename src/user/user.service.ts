@@ -8,7 +8,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/typeorm/entities/user/user.entity';
 import { Repository } from 'typeorm';
-import { CreateUserDto } from './dto/createUser.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 import { AuthUtilsService } from 'src/auth-utils/auth-utils.service';
 
 @Injectable()

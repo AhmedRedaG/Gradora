@@ -9,15 +9,15 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { StudentProfile } from './studentProfile.entity';
-import { SupervisorProfile } from './supervisorProfile.entity';
+import { StudentProfile } from './student-profile.entity';
+import { SupervisorProfile } from './supervisor-profile.entity';
 import { Otp } from '../auth/otp.entity';
-import { RefreshToken } from '../auth/refreshToken.entity';
+import { RefreshToken } from '../auth/refresh-token.entity';
 import { Session } from '../auth/session.entity';
 import { Role } from '../role/role.entity';
-import { TeamMember } from '../team/teamMember.entity';
-import { TeamSupervisor } from '../team/teamSupervisor.entity';
-import { AuthAttempt } from '../auth/authAttempt.entity';
+import { TeamMember } from '../team/team-member.entity';
+import { TeamSupervisor } from '../team/team-supervisor.entity';
+import { AuthAttempt } from '../auth/auth-attempt.entity';
 
 @Entity()
 export class User {

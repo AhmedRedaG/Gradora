@@ -13,9 +13,9 @@ import { LocalLoginDto } from 'src/auth/dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload, JwtTypes } from './types/jwt.types';
 import { InjectRepository } from '@nestjs/typeorm';
-import { RefreshToken } from 'src/typeorm/entities/auth/refreshToken.entity';
+import { RefreshToken } from 'src/typeorm/entities/auth/refresh-token.entity';
 import { Repository } from 'typeorm';
-import { AuthAttempt } from 'src/typeorm/entities/auth/authAttempt.entity';
+import { AuthAttempt } from 'src/typeorm/entities/auth/auth-attempt.entity';
 import { Otp } from 'src/typeorm/entities/auth/otp.entity';
 import { randomInt } from 'crypto';
 import {

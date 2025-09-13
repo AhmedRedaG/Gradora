@@ -6,8 +6,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { TeamMember } from './teamMember.entity';
-import { TeamSupervisor } from './teamSupervisor.entity';
+import { TeamMember } from './team-member.entity';
+import { TeamSupervisor } from './team-supervisor.entity';
 import { Project } from '../project/project.entity';
 
 @Entity()
