@@ -17,7 +17,7 @@ export class ResetPasswordMail {
     const mailOptions: SendMailOptions = {
       from: `"${companyName}" <${serverEmail}>`,
       to: user.email,
-      subject: `Your ${companyName} password reset code`,
+      subject: `Your ${companyName} Password Reset Code`,
       text: this.generatePlainTextContent(firstName, otp, expiresInMinutes),
       html: this.generateHtmlContent(firstName, otp, expiresInMinutes),
     };
