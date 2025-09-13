@@ -8,9 +8,9 @@ export class VerifyAccountMail {
   constructor(private configService: ConfigService) {}
 
   createMail(user: User, verificationToken: string): SendMailOptions {
-    const serverEmail = this.configService.get('email.serverEmail');
-    const clientUrl = this.configService.get('client.baseUrl');
-    const companyName = this.configService.get('company.name');
+    const serverEmail = this.configService.get<string>('email.serverEmail');
+    const clientUrl = this.configService.get<string>('client.baseUrl');
+    const companyName = this.configService.get<string>('company.name');
     const verifyUrl = `${clientUrl}/verify-account/${verificationToken}`;
     const firstName = user.firstName || 'there';
 
@@ -28,8 +28,8 @@ export class VerifyAccountMail {
   }
 
   private generatePlainTextContent(firstName: string, verifyUrl: string) {
-    const supportEmail = this.configService.get('email.supportEmail');
-    const companyName = this.configService.get('company.name');
+    const supportEmail = this.configService.get<string>('email.supportEmail');
+    const companyName = this.configService.get<string>('company.name');
 
     return `
 Hi ${firstName},
@@ -50,8 +50,8 @@ Need help? Contact us at ${supportEmail}`;
   }
 
   private generateHtmlContent(firstName: string, verifyUrl: string) {
-    const supportEmail = this.configService.get('email.supportEmail');
-    const companyName = this.configService.get('company.name');
+    const supportEmail = this.configService.get<string>('email.supportEmail');
+    const companyName = this.configService.get<string>('company.name');
 
     return `
 <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 30px; border: 1px solid #e0e0e0; border-radius: 10px; background-color: #f9f9f9;">

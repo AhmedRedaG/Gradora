@@ -1,25 +1,21 @@
-import { Module } from '@nestjs/common';
-import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RefreshToken } from 'src/typeorm/entities/auth/refreshToken.entity';
 import { UserModule } from 'src/user/user.module';
+import { JwtModule } from '@nestjs/jwt';
 import { CookieModule } from 'src/cookie/cookie.module';
 import { AuthAttempt } from 'src/typeorm/entities/auth/authAttempt.entity';
-import { EmailModule } from 'src/email/email.module';
 import { Otp } from 'src/typeorm/entities/auth/otp.entity';
-import { AuthUtilsModule } from 'src/auth-utils/auth-utils.module';
+import { AuthUtilsService } from './auth-utils.service';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([RefreshToken, AuthAttempt, Otp]),
-    UserModule,
+    JwtModule.register({}),
+    forwardRef(() => UserModule),
     CookieModule,
-    EmailModule,
-    AuthUtilsModule,
   ],
-  controllers: [AuthController],
-  providers: [AuthService],
-  exports: [AuthService],
+  providers: [AuthUtilsService],
+  exports: [AuthUtilsService],
 })
-export class AuthModule {}
+export class AuthUtilsModule {}

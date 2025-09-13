@@ -1,5 +1,7 @@
 import {
   ConflictException,
+  forwardRef,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -7,16 +9,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/typeorm/entities/user/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/createUser.dto';
-
-export enum GetUserByOptions {
-  id = 'id',
-  email = 'email',
-}
+import { AuthUtilsService } from 'src/auth-utils/auth-utils.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
+    @Inject(forwardRef(() => AuthUtilsService))
+    private authUtilsService: AuthUtilsService,
   ) {}
 
   async findByEmail(email: string): Promise<User | null> {
@@ -36,11 +36,20 @@ export class UserService {
     }
 
     const { password, ...result } = await this.userRepository.save(userDto);
+    password.at(0); // ts -_-
 
     return result;
   }
 
   async confirmVerification(userId: string) {
     return await this.userRepository.update(userId, { isVerified: true });
+  }
+
+  async setPassword(userId: string, password: string) {
+    const hashedPassword = await this.authUtilsService.hashPassword(password);
+
+    return await this.userRepository.update(userId, {
+      password: hashedPassword,
+    });
   }
 }

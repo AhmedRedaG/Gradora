@@ -13,11 +13,11 @@ export class Otp {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column('int')
+  @Column('bigint')
   code: number;
 
   @Column('int', { default: 0 })
-  failedAttempts: number;
+  attempts: number;
 
   @CreateDateColumn()
   createdAt: Date;

@@ -17,6 +17,7 @@ import { type Response } from 'express';
 import { CookieService } from 'src/cookie/cookie.service';
 import { Cookie } from './decorator/cookie.decorator';
 import { EmailDto } from './dto/email.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -91,5 +92,29 @@ export class AuthController {
     this.cookieService.clearRefreshTokenCookie(res);
 
     return;
+  }
+
+  @Post('reset')
+  @HttpCode(HttpStatus.OK)
+  async sendResetPassword(@Body() emailDto: EmailDto) {
+    const data = await this.authService.sendResetPassword(emailDto.email);
+
+    return data;
+  }
+
+  @Patch('reset')
+  async resetPassword(
+    @Res({ passthrough: true }) res: Response,
+    @Body() resetPasswordDto: ResetPasswordDto,
+  ) {
+    const data = await this.authService.reset(
+      resetPasswordDto.email,
+      +resetPasswordDto.otp,
+      resetPasswordDto.password,
+    );
+
+    this.cookieService.clearRefreshTokenCookie(res);
+
+    return data;
   }
 }

@@ -1,21 +1,34 @@
 export default () => ({
   auth: {
     path: '/auth',
+    login: {
+      maxAttempts: 10,
+      maxErrorMessage: 'reset your password',
+    },
+    reset: {
+      maxAttempts: 10,
+      maxErrorMessage: 'try again later',
+    },
+  },
+
+  verification: {
+    maxAttempts: 10,
+    coolDown: 1000 * 60 * 15, // 15m
+    maxCoolDown: 1000 * 60 * 60 * 24, // 24h
+  },
+
+  otp: {
+    min: 10_000_000,
+    max: 99_999_999,
+    expiresInMS: 1000 * 60 * 5, // 5 minutes
+    maxAttempts: 10,
+    coolDown: 1000 * 60 * 15, // 15m
+    maxCoolDown: 1000 * 60 * 60 * 24, // 24h
   },
 
   client: { baseUrl: 'http://localhost:8080' },
 
   company: { name: 'Gradora' },
-
-  verification: {
-    maxAttempts: 3,
-    coolDown: 1000 * 60 * 15, // 15m
-    maxCoolDown: 1000 * 60 * 60 * 24, // 24h
-  },
-
-  login: {
-    maxAttempts: 10,
-  },
 
   bcrypt: {
     rounds: 10,

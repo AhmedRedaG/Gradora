@@ -20,7 +20,10 @@ export class AuthAttempt {
   lastVerificationAttempt: Date;
 
   @Column('int', { default: 0 })
-  loginAttempts: number;
+  login: number;
+
+  @Column('int', { default: 0 })
+  reset: number;
 
   @OneToOne(() => User, (user) => user.authAttempt)
   @JoinColumn()
