@@ -39,10 +39,10 @@ export class AuthUtilsService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(loginDto: LocalLoginDto): Promise<User> {
+  async validateUser(loginDto: LocalLoginDto): Promise<User | undefined> {
     const user = await this.userService.findByEmail(loginDto.email);
     if (!user) {
-      throw new UnauthorizedException('invalid email or password');
+      return;
     }
 
     const authAttempt = await this.validateAuthAttemptsLimit(
@@ -61,7 +61,7 @@ export class AuthUtilsService {
         1,
       );
 
-      throw new UnauthorizedException('invalid email or password');
+      return;
     }
 
     await this.authAttemptRepository.update(authAttempt.id, {

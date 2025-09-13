@@ -102,6 +102,10 @@ export class AuthService {
   async login(loginDto: LocalLoginDto) {
     const user = await this.authUtilsService.validateUser(loginDto);
 
+    if (!user) {
+      throw new UnauthorizedException('invalid email or password');
+    }
+
     if (!user.isVerified) {
       throw new ForbiddenException('user not verified yet');
     }
