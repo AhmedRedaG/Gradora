@@ -16,26 +16,26 @@ export class Project {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ length: 150, unique: true })
+  @Column({ length: 256, unique: true })
   title: string;
 
   @Column('text')
   description: string;
 
   // need more
-  @Column()
+  @Column('smallint')
   year: number;
 
   @Column('text')
   techStack: string;
 
-  @Column({ nullable: true })
+  @Column({ length: 256, nullable: true })
   githubUrl: string;
 
-  @Column({ nullable: true })
+  @Column({ length: 256, nullable: true })
   reportUrl: string;
 
-  @Column({ nullable: true })
+  @Column({ length: 256, nullable: true })
   demoUrl: string;
 
   @CreateDateColumn()

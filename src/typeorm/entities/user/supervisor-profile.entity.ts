@@ -13,10 +13,10 @@ export class SupervisorProfile {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ length: 100 })
+  @Column({ length: 256 })
   department: string;
 
-  @Column({ length: 100 })
+  @Column({ length: 256 })
   scientificDegree: string;
 
   @Column('text', { nullable: true })

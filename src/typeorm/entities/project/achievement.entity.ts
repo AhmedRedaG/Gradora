@@ -14,7 +14,7 @@ export class Achievement {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ length: 150 })
+  @Column({ length: 256 })
   title: string;
 
   @Column('text')

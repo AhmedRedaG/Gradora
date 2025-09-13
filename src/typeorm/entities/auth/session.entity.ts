@@ -14,10 +14,10 @@ export class Session {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ length: 256 })
   ipAddress: string;
 
-  @Column()
+  @Column({ length: 256 })
   userAgent: string;
 
   @CreateDateColumn()

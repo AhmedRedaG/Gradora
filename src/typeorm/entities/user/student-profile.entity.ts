@@ -16,13 +16,13 @@ export class StudentProfile {
   @Column('date', { nullable: true })
   graduationDate: Date;
 
-  @Column({ nullable: true })
+  @Column({ length: 256, nullable: true })
   linkedinUrl: string;
 
-  @Column({ nullable: true })
+  @Column({ length: 256, nullable: true })
   githubUrl: string;
 
-  @Column({ nullable: true })
+  @Column({ length: 256, nullable: true })
   portfolioUrl: string;
 
   @Column('text', { nullable: true })

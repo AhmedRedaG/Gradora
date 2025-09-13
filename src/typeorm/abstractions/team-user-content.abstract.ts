@@ -1,7 +1,7 @@
 import { Column, Index, PrimaryColumn } from 'typeorm';
 
 export abstract class TeamUserContent {
-  @Column()
+  @Column({ length: 256 })
   role: string;
 
   @PrimaryColumn()

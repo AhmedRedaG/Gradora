@@ -24,19 +24,19 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ length: 150 })
+  @Column({ length: 128 })
   firstName: string;
 
-  @Column({ length: 150 })
+  @Column({ length: 128 })
   lastName: string;
 
   @Column('text', { nullable: true })
   bio: string;
 
-  @Column({ length: 15, nullable: true })
+  @Column({ length: 32, nullable: true })
   phone: string;
 
-  @Column({ unique: true })
+  @Column({ length: 256, unique: true })
   email: string;
 
   @Column('text') // using hash
@@ -45,13 +45,13 @@ export class User {
   @Column('boolean', { default: false })
   isVerified: boolean;
 
-  @Column({ nullable: true })
+  @Column({ length: 256, nullable: true })
   linkedinUrl: string;
 
-  @Column({ nullable: true })
+  @Column({ length: 256, nullable: true })
   githubUrl: string;
 
-  @Column({ nullable: true })
+  @Column({ length: 256, nullable: true })
   portfolioUrl: string;
 
   @CreateDateColumn()

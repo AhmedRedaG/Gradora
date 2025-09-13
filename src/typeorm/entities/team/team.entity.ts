@@ -15,7 +15,7 @@ export class Team {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ unique: true, length: 150 })
+  @Column({ length: 256, unique: true })
   name: string;
 
   @Column('boolean', { default: false })

@@ -4,10 +4,10 @@ export abstract class RolePermissionContent {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 150 })
+  @Column({ length: 256 })
   name: string;
 
-  @Column({ nullable: true })
+  @Column('text', { nullable: true })
   description: string;
 
   @CreateDateColumn()

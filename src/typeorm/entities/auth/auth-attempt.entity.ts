@@ -13,16 +13,16 @@ export class AuthAttempt {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column('int', { default: 0 })
+  @Column('smallint', { default: 0 })
   verificationAttempts: number;
 
   @CreateDateColumn()
   lastVerificationAttempt: Date;
 
-  @Column('int', { default: 0 })
+  @Column('smallint', { default: 0 })
   login: number;
 
-  @Column('int', { default: 0 })
+  @Column('smallint', { default: 0 })
   reset: number;
 
   @OneToOne(() => User, (user) => user.authAttempt)
