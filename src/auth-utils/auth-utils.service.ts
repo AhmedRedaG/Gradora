@@ -39,39 +39,25 @@ export class AuthUtilsService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(loginDto: LocalLoginDto): Promise<User | undefined> {
+  async validateUser(
+    loginDto: LocalLoginDto,
+  ): Promise<{ user: User | null; isValid: boolean }> {
     const user = await this.userService.findByEmail(loginDto.email);
     if (!user) {
-      return;
+      return { user: null, isValid: false };
     }
-
-    const authAttempt = await this.validateAuthAttemptsLimit(
-      user.id,
-      AuthAttemptTypes.LOGIN,
-    );
 
     const isValidPassword = await this.validatePassword(
       loginDto.password,
       user.password!,
     );
     if (!isValidPassword) {
-      await this.authAttemptRepository.increment(
-        { id: authAttempt.id },
-        'login',
-        1,
-      );
-
-      return;
+      return { user, isValid: false };
     }
-
-    await this.authAttemptRepository.update(authAttempt.id, {
-      login: 0,
-      reset: 0,
-    });
 
     delete user.password;
 
-    return user;
+    return { user, isValid: true };
   }
 
   async validateSendOtpAttempts(userId: string): Promise<number> {
@@ -142,9 +128,10 @@ export class AuthUtilsService {
     }
   }
 
-  async validateAuthAttemptsLimit(
+  async validateAuthAttempts(
     userId: string,
     authType: AuthAttemptTypes,
+    isValid: boolean,
   ): Promise<AuthAttempt> {
     const authAttempt = await this.authAttemptRepository.findOneBy({
       user: { id: userId },
@@ -160,6 +147,19 @@ export class AuthUtilsService {
     if (authAttempt[authType] >= maxAttempts) {
       throw new ForbiddenException(
         `too many attempts. ${maxErrorMessage} or contact support.`,
+      );
+    }
+
+    if (isValid) {
+      await this.authAttemptRepository.update(authAttempt.id, {
+        login: 0,
+        reset: 0,
+      });
+    } else {
+      await this.authAttemptRepository.increment(
+        { id: authAttempt.id },
+        authType,
+        1,
       );
     }
 

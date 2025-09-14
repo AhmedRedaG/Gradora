@@ -100,12 +100,20 @@ export class AuthService {
   }
 
   async login(loginDto: LocalLoginDto) {
-    const user = await this.authUtilsService.validateUser(loginDto);
+    const { user, isValid } =
+      await this.authUtilsService.validateUser(loginDto);
 
-    if (!user) {
-      throw new UnauthorizedException('invalid email or password');
+    if (user) {
+      await this.authUtilsService.validateAuthAttempts(
+        user.id,
+        AuthAttemptTypes.LOGIN,
+        isValid,
+      );
     }
 
+    if (!user || !isValid) {
+      throw new UnauthorizedException('invalid email or password');
+    }
     if (!user.isVerified) {
       throw new ForbiddenException('user not verified yet');
     }
@@ -212,41 +220,23 @@ export class AuthService {
       expiresAt: MoreThan(new Date()),
     });
 
-    const authAttempt = await this.authUtilsService.validateAuthAttemptsLimit(
+    await this.authUtilsService.validateAuthAttempts(
       user.id,
       AuthAttemptTypes.RESET,
+      otpRecord ? true : false,
     );
 
     if (!otpRecord) {
-      await this.authAttemptRepository.increment(
-        { id: authAttempt.id },
-        'reset',
-        1,
-      );
       throw new UnauthorizedException('invalid or expired otp');
     }
 
     await Promise.all([
       this.userService.setPassword(user.id, password),
 
-      this.authAttemptRepository.update(authAttempt.id, {
-        reset: 0,
-      }),
-
       this.refreshTokenRepository.delete({ user }),
 
       this.otpRepository.delete({ user }),
     ]);
-
-    // await this.userService.setPassword(user.id, password);
-
-    // await this.authAttemptRepository.update(authAttempt.id, {
-    //   reset: 0,
-    // });
-
-    // await this.refreshTokenRepository.delete({ user });
-
-    // await this.otpRepository.delete({ user });
 
     return { message: 'password has been reset' };
   }
